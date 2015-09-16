@@ -25,11 +25,13 @@ class Orders(models.Model):
     running_total = models.IntegerField()
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'orders'
         app_label = 'orders'
         verbose_name_plural = 'Orders'
 
+    def __unicode__(self):
+            return u'%s, %s' % (self.create_at, self.user.username)
 
 class Products(models.Model):
     green_coffee = models.ForeignKey(GreenCoffees)
@@ -39,20 +41,22 @@ class Products(models.Model):
     status = models.IntegerField()
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'products'
         app_label = 'orders'
         verbose_name_plural = 'Products'
 
+    def __unicode__(self):
+            return u'%s, %s, %s' % (self.create_at, self.green_coffee.name, self.green_coffee.processStr(self.green_coffee.process))
 
 class SellingItems(models.Model):
     order = models.ForeignKey(Orders)
-    roastlog = models.ForeignKey(Roastlogs)
+    roastlog = models.ForeignKey("roastlogs.Roastlogs", blank=True, null=True)
     selling_price = models.IntegerField()
     product = models.ForeignKey(Products)
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'selling_items'
         app_label = 'orders'
         verbose_name_plural = 'Selling Items'
